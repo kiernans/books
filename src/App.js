@@ -6,13 +6,28 @@ const App = () => {
 	const [books, setBooks] = useState([]);
 
 	const createBook = (title) => {
-		setBooks([...books, title]);
+		setBooks([...books, { id: Math.round(Math.random() * 9999), title }]);
 	};
 
+	const deleteBookById = (id) => {
+		const updatedBooks = books.filter((book) => book.id !== id);
+		setBooks(updatedBooks);
+	};
+
+	const editBookById = (id, newTitle) => {
+		const updatedBooks = books.map((book) => {
+			if (book.id === id) {
+				return { ...book, title: newTitle };
+			}
+			return book;
+		});
+
+		setBooks(updatedBooks);
+	};
 	return (
-		<div>
-			<div>Reading List</div>
-			<BookList books={books} />
+		<div className='app'>
+			<h1>Reading List</h1>
+			<BookList books={books} onDelete={deleteBookById} onEdit={editBookById} />
 			<BookCreate onCreate={createBook} />
 		</div>
 	);
